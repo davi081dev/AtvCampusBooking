@@ -22,6 +22,8 @@ export type BookingData = Omit<CreateBooking, 'startAt' | 'endAt'> & {
   endAt: Date;
 };
 
+export type BookingUpdateData = Omit<BookingData, 'userId'>;
+
 export type RoomWithBookings = Prisma.RoomGetPayload<{
   include: {
     bookings: true;

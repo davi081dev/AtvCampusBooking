@@ -1,12 +1,10 @@
-import type { Room, Building, Booking, User } from '@prisma/client';
-import type { RoomFilters, RoomWithBookings, BookingData } from '../../shared/types.js';
+import type { Building } from '@prisma/client';
+import type { RoomWithBookings } from '../../shared/types.js';
 import { prisma } from '../prisma/index.js';
-import { AppError } from '../../shared/errors/AppError.js';
 
 export class BuildingRepository {
   async findById(id: number): Promise<Building | null> {
-    // TODO: implementar operação de persistência.
-    throw new AppError(501, 'NOT_IMPLEMENTED', 'Operação ainda não implementada.');
+    return prisma.building.findUnique({ where: { id } });
   }
 
   async roomsWithBookings(
@@ -14,7 +12,13 @@ export class BuildingRepository {
     from: Date,
     to: Date
   ): Promise<RoomWithBookings[]> {
-    // TODO: implementar operação de persistência.
-    throw new AppError(501, 'NOT_IMPLEMENTED', 'Operação ainda não implementada.');
+    return prisma.room.findMany({
+      where: { buildingId, active: true },
+      include: {
+        bookings: {
+          where: { startAt: { lt: to }, endAt: { gt: from } }
+        }
+      }
+    });
   }
 }

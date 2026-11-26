@@ -51,11 +51,12 @@ model Booking {
   userId    Int
   roomId    Int
   startAt   DateTime
-  endAt     DateTime?
+  endAt     DateTime
   purpose   String
   createdAt DateTime  @default(now())
   user      User      @relation(fields: [userId], references: [id], onDelete: Restrict)
   room      Room      @relation(fields: [roomId], references: [id], onDelete: Restrict)
 
+  @@unique([roomId, startAt])
   @@index([userId, startAt])
 }
