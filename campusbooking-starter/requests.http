@@ -1,0 +1,49 @@
+@baseUrl = http://localhost:3002
+@date = 2026-12-01
+# Substitua date pelo dia principal impresso pelo seed.
+# Execute individualmente. PATCH e DELETE alteram o registro #1.
+# Para recuperar as fixtures, npm run db:seed (apaga dados anteriores).
+
+### Health
+GET {{baseUrl}}/health
+
+### Listagem
+GET {{baseUrl}}/api/rooms?buildingId=1&type=LAB&active=true
+
+### Utilização
+GET {{baseUrl}}/api/buildings/1/usage?date={{date}}
+
+### Criar reserva
+POST {{baseUrl}}/api/bookings
+Content-Type: application/json
+
+{
+  "userId": 1,
+  "roomId": 3,
+  "startAt": "{{date}}T11:00:00-03:00",
+  "endAt": "{{date}}T12:00:00-03:00",
+  "purpose": "Projeto integrador"
+}
+
+### Alterar reserva #1
+PATCH {{baseUrl}}/api/bookings/1
+Content-Type: application/json
+
+{
+  "purpose": "Reunião revisada"
+}
+
+### Cancelar reserva #1
+DELETE {{baseUrl}}/api/bookings/1
+
+### Erro: sala inativa
+POST {{baseUrl}}/api/bookings
+Content-Type: application/json
+
+{
+  "userId": 15,
+  "roomId": 4,
+  "startAt": "{{date}}T11:00:00-03:00",
+  "endAt": "{{date}}T12:00:00-03:00",
+  "purpose": "Estudo"
+}
